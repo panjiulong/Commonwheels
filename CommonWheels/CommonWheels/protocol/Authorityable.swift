@@ -17,7 +17,7 @@ import UserNotifications
 public typealias SystemAuthAuthorizedBlock = () -> (Void)
 public typealias SystemAuthDeniedBlock = (String,String) -> (Void)
 public typealias SystemAuthSettingBlock = ()-> (Void)
-
+//MARK: - AuthType
 enum AuthType {
     case video                  //相机
     case photos                 //相册
@@ -72,11 +72,93 @@ enum AuthType {
     }
 }
 
-
-protocol Authorityable:class {
-    var locationManager: CLLocationManager{get set}
-    var cellularData: CTCellularData?{ get set }
+//MARK: - AuthorityAlertable
+protocol AuthorityAlertable {}
+extension AuthorityAlertable{
+    func runDeniedBlock(with type:AuthType,deniedBlock:SystemAuthDeniedBlock?) {
+        deniedBlock?(type.alertTitleText(),type.alertDetailText())
+    }
 }
+
+//MARK: - LocationAuthorityable
+protocol LocationAuthorityable:CLLocationManagerDelegate,AuthorityAlertable{
+    var locationManager: CLLocationManager?{get set}
+    var locationAuthorizedBlock:SystemAuthAuthorizedBlock?{get set}
+    var locationAuthDeniedBlock:SystemAuthDeniedBlock?{get set}
+}
+
+extension LocationAuthorityable{
+    func getLocationAlwaysAuthority(authorizedBlock: @escaping SystemAuthAuthorizedBlock, deniedBlock: @escaping SystemAuthDeniedBlock){
+        locationAuthorizedBlock = authorizedBlock
+        locationAuthDeniedBlock = deniedBlock
+        let authStatus: CLAuthorizationStatus = CLLocationManager.authorizationStatus()
+        locationManager = CLLocationManager.init()
+        locationManager?.delegate = self
+        switch authStatus {
+        case .notDetermined:
+           locationManager?.requestAlwaysAuthorization()
+        case .authorizedAlways:
+            locationAuthorizedBlock?()
+        default:
+            runDeniedBlock(with: .locationAlways, deniedBlock: locationAuthDeniedBlock)
+        }
+    }
+
+    func getLocationWhenInUseAuthority(authorizedBlock: @escaping SystemAuthAuthorizedBlock, deniedBlock: @escaping SystemAuthDeniedBlock){
+        locationAuthorizedBlock = authorizedBlock
+        locationAuthDeniedBlock = deniedBlock
+        let authStatus: CLAuthorizationStatus = CLLocationManager.authorizationStatus()
+        locationManager = CLLocationManager.init()
+        switch authStatus {
+        case .notDetermined:
+            locationManager?.requestWhenInUseAuthorization()
+        case .authorizedAlways:
+            fallthrough
+        case .authorizedWhenInUse:
+            locationAuthorizedBlock?()
+        default:
+            runDeniedBlock(with: .locationWhenInUse, deniedBlock: locationAuthDeniedBlock)
+        }
+    }
+//    func runDeniedBlock(with type:AuthType,deniedBlock:SystemAuthDeniedBlock?) {
+//        deniedBlock?(type.alertTitleText(),type.alertDetailText())
+//    }
+}
+
+extension LocationAuthorityable{
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        switch status {
+        case .authorizedAlways:
+            fallthrough
+        case .authorizedWhenInUse:
+            locationAuthorizedBlock?()
+        default:
+            runDeniedBlock(with: .locationWhenInUse, deniedBlock: locationAuthDeniedBlock)
+        }
+    }
+}
+
+//MARK: - CellularNetworkAuthorityable
+protocol CellularNetworkAuthorityable:CLLocationManagerDelegate,AuthorityAlertable{
+    var cellularData: CTCellularData?{get set}
+}
+extension CellularNetworkAuthorityable{
+    func getCellularNetworkAuthority(authorizedBlock: @escaping SystemAuthAuthorizedBlock, deniedBlock: @escaping SystemAuthDeniedBlock){
+        cellularData?.cellularDataRestrictionDidUpdateNotifier = {[weak self] state in
+            DispatchQueue.main.async {
+                switch state {
+                case .notRestricted:
+                    authorizedBlock()
+                default:
+                    self?.runDeniedBlock(with: .cellularNetwork, deniedBlock: deniedBlock)
+                }
+            }
+        }
+    }
+}
+
+//MARK: - Authorityable
+protocol Authorityable:class,CLLocationManagerDelegate,AuthorityAlertable {}
 
 extension Authorityable{
     func requestAuthority(authType: AuthType, authorizedBlock: @escaping SystemAuthAuthorizedBlock, deniedBlock: @escaping SystemAuthDeniedBlock) {
@@ -89,14 +171,9 @@ extension Authorityable{
             getVideoAuthority(authorizedBlock: authorizedBlock, deniedBlock: deniedBlock)
         case .contact:
             getContactAuthority(authorizedBlock: authorizedBlock, deniedBlock: deniedBlock)
-        case .locationAlways:
-            getLocationAlwaysAuthority(authorizedBlock: authorizedBlock, deniedBlock: deniedBlock)
-        case .locationWhenInUse:
-            getLocationWhenInUseAuthority(authorizedBlock: authorizedBlock, deniedBlock: deniedBlock)
         case .notifications:
             getNotificationAuthority(authorizedBlock: authorizedBlock, deniedBlock: deniedBlock)
-        case .cellularNetwork:
-            getCellularNetworkAuthority(authorizedBlock: authorizedBlock, deniedBlock: deniedBlock)
+        default:break
         }
     }
 }
@@ -106,10 +183,12 @@ extension Authorityable{
         let library = PHPhotoLibrary.authorizationStatus()
         if library == .notDetermined {
             PHPhotoLibrary.requestAuthorization({status in
-                if status == .authorized {
-                    result(true, status)
-                } else if status == .denied || status == .restricted{
-                    result(false, status)
+                DispatchQueue.main.async{
+                    if status == .authorized {
+                        result(true, status)
+                    } else if status == .denied || status == .restricted{
+                        result(false, status)
+                    }
                 }
             })
         } else {
@@ -123,17 +202,16 @@ extension Authorityable{
         let authStatus:AVAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.audio)
         switch authStatus {
         case .notDetermined:
-            DispatchQueue.global(qos: .userInitiated).async {
-                AVAudioSession.sharedInstance().requestRecordPermission({ [weak self](granted) in
-                    DispatchQueue.main.async {
-                        if granted {
-                            authorizedBlock()
-                        } else {
-                            self?.runDeniedBlock(with: .audio, deniedBlock: deniedBlock)
-                        }
+            AVAudioSession.sharedInstance().requestRecordPermission({ [weak self](granted) in
+                DispatchQueue.main.async {
+                    if granted {
+                        authorizedBlock()
+                    } else {
+                        self?.runDeniedBlock(with: .audio, deniedBlock: deniedBlock)
                     }
-                })
-            }
+                }
+            })
+
         case .authorized:
             authorizedBlock()
         default:
@@ -146,15 +224,15 @@ extension Authorityable{
             let authStatus:CNAuthorizationStatus = CNContactStore.authorizationStatus(for: CNEntityType.contacts)
             switch authStatus {
             case .notDetermined:
-                DispatchQueue.global(qos: .userInitiated).async {
-                    CNContactStore.init().requestAccess(for: CNEntityType.contacts, completionHandler: { [weak self](granted, error) in
+                CNContactStore.init().requestAccess(for: CNEntityType.contacts, completionHandler: { [weak self](granted, error) in
+                    DispatchQueue.main.async {
                         if granted && (error == nil){
                             authorizedBlock()
                         } else {
                             self?.runDeniedBlock(with: .contact, deniedBlock: deniedBlock)
                         }
-                    })
-                }
+                    }
+                })
             case .authorized:
                 authorizedBlock()
             default:
@@ -168,15 +246,17 @@ extension Authorityable{
             let authStatus:AVAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
             switch authStatus {
             case .notDetermined:
-                DispatchQueue.global(qos: .userInitiated).async {
-                    AVCaptureDevice.requestAccess(for: AVMediaType.video, completionHandler: {[weak self] (granted) in
+
+                AVCaptureDevice.requestAccess(for: AVMediaType.video, completionHandler: {[weak self] (granted) in
+                    DispatchQueue.main.async {
                         if granted {
                             authorizedBlock()
                         } else {
                             self?.runDeniedBlock(with: .video, deniedBlock: deniedBlock)
                         }
-                    })
-                }
+                    }
+                })
+
             case .authorized:
                 authorizedBlock()
             default:
@@ -189,15 +269,15 @@ extension Authorityable{
         let authStatus:PHAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
         switch authStatus {
         case .notDetermined:
-            DispatchQueue.global(qos: .userInitiated).async {
-                PHPhotoLibrary.requestAuthorization({ [weak self](status) in
+            PHPhotoLibrary.requestAuthorization({ [weak self](status) in
+                DispatchQueue.main.async {
                     if status == .authorized {
                         authorizedBlock()
                     } else {
                         self?.runDeniedBlock(with: .photos, deniedBlock: deniedBlock)
                     }
-                })
-            }
+                }
+            })
         case .authorized:
             authorizedBlock()
         default:
@@ -211,17 +291,25 @@ extension Authorityable{
                 switch setting.authorizationStatus {
                 case .notDetermined:
                     UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]){(granted, error) in
-                        if granted && (error == nil){
-                            authorizedBlock()
-                        } else {
-                            self?.runDeniedBlock(with: .notifications, deniedBlock: deniedBlock)
+                        DispatchQueue.main.async {
+                            if granted && (error == nil){
+                                authorizedBlock()
+                            } else {
+                                self?.runDeniedBlock(with: .notifications, deniedBlock: deniedBlock)
+                            }
                         }
+
                     }
 
                 case .provisional:
-                    authorizedBlock()
+                    DispatchQueue.main.async {
+                        authorizedBlock()
+                    }
                 default:
-                    self?.runDeniedBlock(with: .notifications, deniedBlock: deniedBlock)
+                    DispatchQueue.main.async {
+                        self?.runDeniedBlock(with: .notifications, deniedBlock: deniedBlock)
+                    }
+
                 }
             }
 
@@ -238,56 +326,9 @@ extension Authorityable{
         }
     }
 
-    func getCellularNetworkAuthority(authorizedBlock: @escaping SystemAuthAuthorizedBlock, deniedBlock: @escaping SystemAuthDeniedBlock){
-        cellularData = CTCellularData()
-        cellularData?.cellularDataRestrictionDidUpdateNotifier = {[weak self] state in
-            switch state {
-            case .notRestricted:
-                authorizedBlock()
-            default:
-                self?.runDeniedBlock(with: .cellularNetwork, deniedBlock: deniedBlock)
-            }
-        }
-    }
 
-    func getLocationAlwaysAuthority(authorizedBlock: @escaping SystemAuthAuthorizedBlock, deniedBlock: @escaping SystemAuthDeniedBlock){
-        let authStatus: CLAuthorizationStatus = CLLocationManager.authorizationStatus()
-        switch authStatus {
-        case .notDetermined:
-            DispatchQueue.global(qos: .userInitiated).async {[weak self] in
-                self?.locationManager = CLLocationManager.init()
-                self?.locationManager.requestAlwaysAuthorization()
-                DispatchQueue.main.async {
-                    authorizedBlock()
-                }
-            }
-        case .authorizedAlways:
-            authorizedBlock()
-        default:
-            runDeniedBlock(with: .locationAlways, deniedBlock: deniedBlock)
-        }
-    }
-
-    func getLocationWhenInUseAuthority(authorizedBlock: @escaping SystemAuthAuthorizedBlock, deniedBlock: @escaping SystemAuthDeniedBlock){
-        let authStatus: CLAuthorizationStatus = CLLocationManager.authorizationStatus()
-        switch authStatus {
-        case .notDetermined:
-            DispatchQueue.global(qos: .userInitiated).async {[weak self] in
-                self?.locationManager.requestWhenInUseAuthorization()
-                DispatchQueue.main.async {
-                    authorizedBlock()
-                }
-            }
-        case .authorizedAlways:
-            fallthrough
-        case .authorizedWhenInUse:
-            authorizedBlock()
-        default:
-            runDeniedBlock(with: .locationWhenInUse, deniedBlock: deniedBlock)
-        }
-    }
-
-    func runDeniedBlock(with type:AuthType,deniedBlock:SystemAuthDeniedBlock) {
-        deniedBlock(type.alertTitleText(),type.alertDetailText())
-    }
+//    func runDeniedBlock(with type:AuthType,deniedBlock:SystemAuthDeniedBlock) {
+//        deniedBlock(type.alertTitleText(),type.alertDetailText())
+//    }
 }
+
