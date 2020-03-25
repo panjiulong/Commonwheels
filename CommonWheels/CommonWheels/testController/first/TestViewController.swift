@@ -30,7 +30,7 @@ class TestViewController: UIViewController,Authorityable,LocationAuthorityable,C
     var cellularData: CTCellularData? = CTCellularData()
 
 
-    let animator = PresentAnimator(animatorType: .scaleCenter, hasBackground: true)
+    let animator = TransitionAnimator(animatorType: .scaleCenter(startScale: 0.0,endScale: 1.1,finalScale: 1.0,dismissScale: 0.5,startAlpha: 0.0,endAlpha: 1.0), hasBackground: true)
 
     override func viewDidLoad() {
         super.viewDidLoad()

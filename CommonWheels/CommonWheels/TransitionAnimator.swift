@@ -29,7 +29,7 @@ enum AnimatorType {
     case bottomToTop
     case leftToRight
     case rightToLeft
-    case scaleCenter
+    case scaleCenter(startScale:CGFloat = 0.0,endScale:CGFloat = 1.0,finalScale:CGFloat = 1.0,dismissScale:CGFloat = 0.0,startAlpha:CGFloat = 0.0,endAlpha:CGFloat = 1.0)
 
     var animatorConfig:AnimationConfig{
         return AnimationConfig(prepareAnimation: {transitionContext in
@@ -61,9 +61,10 @@ enum AnimatorType {
             presentedView.frame = CGRect(x: -width, y: y, width: width, height:height)
         case .rightToLeft:
             presentedView.frame = CGRect(x: width, y: y, width: width, height:height)
-        case .scaleCenter:
+        case let .scaleCenter(startScale,_,_,_,startAlpha,_):
             presentedView.frame = presentedView.bounds
-            presentedView.transform = CGAffineTransform(scaleX: 0, y: 0)
+            presentedView.alpha = startAlpha
+            presentedView.transform = CGAffineTransform(scaleX: startScale, y: startScale)
         }
     }
 
@@ -78,8 +79,9 @@ enum AnimatorType {
             presentedView.frame.origin.x = 0.0
         case .rightToLeft:
             presentedView.frame.origin.x = 0.0
-        case .scaleCenter:
-            presentedView.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+        case let .scaleCenter(_,endScale,_,_,_,endAlpha):
+            presentedView.transform = CGAffineTransform(scaleX: endScale, y: endScale)
+            presentedView.alpha = endAlpha
         }
     }
 
@@ -87,9 +89,9 @@ enum AnimatorType {
     func  presentedFinishAnimation(_ transitionContext: UIViewControllerContextTransitioning) {
         let presentedView = transitionContext.viewController(forKey: .to)!
         switch self {
-        case .scaleCenter:
+        case let .scaleCenter(_,_,finalScale,_,_,_):
             UIView.animate(withDuration: 0.1, animations: {
-                presentedView.view.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+                presentedView.view.transform = CGAffineTransform(scaleX: finalScale, y: finalScale)
             }, completion: { (completed) in
                 transitionContext.completeTransition(completed)
             })
@@ -109,9 +111,9 @@ enum AnimatorType {
             dismissView.frame.origin.x = -transitionContext.containerView.frame.width
         case .rightToLeft:
             dismissView.frame.origin.x = transitionContext.containerView.frame.width
-        case .scaleCenter:
-            dismissView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
-            dismissView.alpha = 0.01
+        case let .scaleCenter(_,_,_,dismissScale,startAlpha,_):
+            dismissView.transform = CGAffineTransform(scaleX: dismissScale, y: dismissScale)
+            dismissView.alpha = startAlpha
         }
     }
     func dismissedFinishAnimation(_ transitionContext: UIViewControllerContextTransitioning){
@@ -121,7 +123,7 @@ enum AnimatorType {
     }
 }
 
-class PresentAnimator: NSObject {
+class TransitionAnimator: NSObject {
     var animatorType:AnimatorType
     var hasBackground:Bool
     var duration:TimeInterval
@@ -137,7 +139,7 @@ class PresentAnimator: NSObject {
         }
 
     }
-    private var isPresented : Bool = false
+    private var isPresented : Bool = true
     lazy var backGroundView : UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(white: 0, alpha: 0.5)
@@ -145,7 +147,7 @@ class PresentAnimator: NSObject {
         return view
     }()
 }
-extension PresentAnimator:UIViewControllerTransitioningDelegate{
+extension TransitionAnimator:UIViewControllerTransitioningDelegate{
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         isPresented = true
         return self
@@ -156,7 +158,7 @@ extension PresentAnimator:UIViewControllerTransitioningDelegate{
     }
 }
 
-extension PresentAnimator:UIViewControllerAnimatedTransitioning{
+extension TransitionAnimator:UIViewControllerAnimatedTransitioning{
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return duration
     }
@@ -186,7 +188,7 @@ extension PresentAnimator:UIViewControllerAnimatedTransitioning{
             self?.animationConfig?.presentedFinishAnimation(transitionContext)
         }
     }
-    
+
     func animationForDismissedView(transitionContext: UIViewControllerContextTransitioning) {
         UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, options: .curveEaseInOut, animations: {[weak self] in
             self?.animationConfig?.dismissedAnimation(transitionContext)

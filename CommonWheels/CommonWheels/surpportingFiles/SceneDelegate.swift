@@ -24,6 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
             window.rootViewController = UIStoryboard.init(name: "TestStoryboard", bundle: nil).instantiateInitialViewController()
+            window.backgroundColor = .white
             self.window = window
             window.makeKeyAndVisible()
         }

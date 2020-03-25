@@ -10,12 +10,12 @@ import UIKit
 
 class TestAnimationViewController: UIViewController {
     
-    let rightToLeft = PresentAnimator(animatorType: .rightToLeft, hasBackground: true)
+    let rightToLeft = TransitionAnimator(animatorType: .rightToLeft, hasBackground: true)
     
-    let leftToRight = PresentAnimator(animatorType: .leftToRight, hasBackground: true)
-    let bottomToTop = PresentAnimator(animatorType: .bottomToTop, hasBackground: true)
-    let topTobottom = PresentAnimator(animatorType: .topTobottom, hasBackground: true)
-    let scaleCenter = PresentAnimator(animatorType: .scaleCenter, hasBackground: true)
+    let leftToRight = TransitionAnimator(animatorType: .leftToRight, hasBackground: true)
+    let bottomToTop = TransitionAnimator(animatorType: .bottomToTop, hasBackground: true)
+    let topTobottom = TransitionAnimator(animatorType: .topTobottom, hasBackground: true)
+    let scaleCenter = TransitionAnimator(animatorType: .scaleCenter(startScale: 0.0,endScale: 1.1,finalScale: 1.0,dismissScale: 0.5,startAlpha: 0.0,endAlpha: 1.0), hasBackground: true)
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -46,7 +46,7 @@ class TestAnimationViewController: UIViewController {
         
     }
     
-    func createVC(_ animator:PresentAnimator){
+    func createVC(_ animator:TransitionAnimator){
         let vc = UIStoryboard(name: "TestStoryboard", bundle: nil).instantiateViewController(identifier: "TestAnimatored")
         vc.modalPresentationStyle = .custom
         vc.transitioningDelegate = animator
