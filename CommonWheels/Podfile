@@ -7,5 +7,6 @@ target 'CommonWheels' do
   # use_modular_headers！
 
   pod 'Moya/RxSwift', '~> 14.0'
+  pod 'Moya-ObjectMapper/RxSwift'
 
 end

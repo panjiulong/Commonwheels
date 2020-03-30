@@ -350,6 +350,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="5f3-qB-VR9" customClass="MainTableController" customModule="CommonWheels" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="jgx-Q6-ZBb">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
@@ -371,17 +372,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j03-Ax-eUZ">
-                                <rect key="frame" x="107" y="343" width="240" height="339"/>
-                                <color key="backgroundColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t0o-wj-Itv">
+                                <rect key="frame" x="153" y="176" width="108" height="30"/>
+                                <state key="normal" title="发送请求"/>
+                                <connections>
+                                    <action selector="sendRequest:" destination="HBU-yI-D2M" eventType="touchUpInside" id="2LC-02-KN0"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="j03-Ax-eUZ" firstAttribute="top" secondItem="i3O-Zu-TuI" secondAttribute="top" constant="255" id="gge-sb-YBE"/>
-                            <constraint firstItem="i3O-Zu-TuI" firstAttribute="bottom" secondItem="j03-Ax-eUZ" secondAttribute="bottom" constant="131" id="ncL-Qq-fvp"/>
-                            <constraint firstItem="i3O-Zu-TuI" firstAttribute="trailing" secondItem="j03-Ax-eUZ" secondAttribute="trailing" constant="67" id="uPw-bm-B4Y"/>
-                            <constraint firstItem="j03-Ax-eUZ" firstAttribute="leading" secondItem="i3O-Zu-TuI" secondAttribute="leading" constant="107" id="xIw-jP-HbB"/>
+                            <constraint firstItem="t0o-wj-Itv" firstAttribute="centerX" secondItem="U2A-sm-MGz" secondAttribute="centerX" id="2MY-a4-sdw"/>
+                            <constraint firstItem="t0o-wj-Itv" firstAttribute="leading" secondItem="i3O-Zu-TuI" secondAttribute="leading" constant="153" id="QbB-md-QvN"/>
+                            <constraint firstItem="t0o-wj-Itv" firstAttribute="top" secondItem="i3O-Zu-TuI" secondAttribute="top" constant="88" id="nRP-HA-Mi7"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="i3O-Zu-TuI"/>
                     </view>

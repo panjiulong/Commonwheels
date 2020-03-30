@@ -1,0 +1,37 @@
+
+{
+    "code": 3000,
+    "message": "成功",
+    "resp": [{
+        "money": "0.00",
+        "hphm": "AL129N",
+        "type": 720,
+        "payType": 0,
+        "createdAt": "2019-07-02 17:32:50"
+    }, {
+        "money": "0.00",
+        "hphm": "A9920F",
+        "type": 720,
+        "payType": 0,
+        "createdAt": "2019-07-02 14:31:16"
+    }, {
+        "money": "0.00",
+        "hphm": "AL129N",
+        "type": 720,
+        "payType": 0,
+        "createdAt": "2019-07-02 14:26:56"
+    }, {
+        "money": "0.00",
+        "hphm": "A677S3",
+        "type": 720,
+        "payType": 0,
+        "createdAt": "2019-07-02 14:12:27"
+    }, {
+        "money": "0.00",
+        "hphm": "A49VL8",
+        "type": 720,
+        "payType": 0,
+        "createdAt": "2019-07-02 14:02:49"
+    }]
+}
+

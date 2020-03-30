@@ -21,6 +21,15 @@
 		61C07CC52429ACAB00B02FBB /* BaseNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C07CC42429ACAB00B02FBB /* BaseNavigationController.swift */; };
 		61C07CC72429ACCF00B02FBB /* TransitionAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C07CC62429ACCE00B02FBB /* TransitionAnimation.swift */; };
 		61C07CC92429B9A100B02FBB /* TopTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C07CC82429B9A100B02FBB /* TopTestViewController.swift */; };
+		61C07CCC24319C7A00B02FBB /* ExampleAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C07CCB24319C7A00B02FBB /* ExampleAPI.swift */; };
+		61C07CCF24319E2F00B02FBB /* ExampleInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C07CCE24319E2F00B02FBB /* ExampleInfo.swift */; };
+		61C07CD12431A2B600B02FBB /* ResponseNormalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C07CD02431A2B600B02FBB /* ResponseNormalModel.swift */; };
+		61C07CD42431A31B00B02FBB /* JLProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C07CD32431A31B00B02FBB /* JLProvider.swift */; };
+		61C07CD72431A37F00B02FBB /* ExampleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C07CD62431A37F00B02FBB /* ExampleService.swift */; };
+		61C07CDB2431C0B500B02FBB /* Response+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C07CDA2431C0B500B02FBB /* Response+Rx.swift */; };
+		61C07CE02431DE7400B02FBB /* token.json in Resources */ = {isa = PBXBuildFile; fileRef = 61C07CDF2431DE7400B02FBB /* token.json */; };
+		61C07CE22431DEC500B02FBB /* data.json in Resources */ = {isa = PBXBuildFile; fileRef = 61C07CE12431DEC500B02FBB /* data.json */; };
+		61C07CE42431E46200B02FBB /* LocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C07CE32431E46200B02FBB /* LocalData.swift */; };
 		61C65ADC242204E3008B44E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C65ADB242204E3008B44E0 /* AppDelegate.swift */; };
 		61C65ADE242204E3008B44E0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C65ADD242204E3008B44E0 /* SceneDelegate.swift */; };
 		61C65AE0242204E3008B44E0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C65ADF242204E3008B44E0 /* ContentView.swift */; };
@@ -55,6 +64,15 @@
 		61C07CC42429ACAB00B02FBB /* BaseNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNavigationController.swift; sourceTree = "<group>"; };
 		61C07CC62429ACCE00B02FBB /* TransitionAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionAnimation.swift; sourceTree = "<group>"; };
 		61C07CC82429B9A100B02FBB /* TopTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTestViewController.swift; sourceTree = "<group>"; };
+		61C07CCB24319C7A00B02FBB /* ExampleAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleAPI.swift; sourceTree = "<group>"; };
+		61C07CCE24319E2F00B02FBB /* ExampleInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleInfo.swift; sourceTree = "<group>"; };
+		61C07CD02431A2B600B02FBB /* ResponseNormalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseNormalModel.swift; sourceTree = "<group>"; };
+		61C07CD32431A31B00B02FBB /* JLProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JLProvider.swift; sourceTree = "<group>"; };
+		61C07CD62431A37F00B02FBB /* ExampleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleService.swift; sourceTree = "<group>"; };
+		61C07CDA2431C0B500B02FBB /* Response+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Response+Rx.swift"; sourceTree = "<group>"; };
+		61C07CDF2431DE7400B02FBB /* token.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = token.json; sourceTree = "<group>"; };
+		61C07CE12431DEC500B02FBB /* data.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = data.json; sourceTree = "<group>"; };
+		61C07CE32431E46200B02FBB /* LocalData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalData.swift; sourceTree = "<group>"; };
 		61C65AD8242204E3008B44E0 /* CommonWheels.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommonWheels.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		61C65ADB242204E3008B44E0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		61C65ADD242204E3008B44E0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -152,6 +170,49 @@
 			path = main;
 			sourceTree = "<group>";
 		};
+		61C07CCA24319B9900B02FBB /* API */ = {
+			isa = PBXGroup;
+			children = (
+				61C07CCB24319C7A00B02FBB /* ExampleAPI.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		61C07CCD24319E1D00B02FBB /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				61C07CCE24319E2F00B02FBB /* ExampleInfo.swift */,
+				61C07CD02431A2B600B02FBB /* ResponseNormalModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		61C07CD22431A2FE00B02FBB /* Provider */ = {
+			isa = PBXGroup;
+			children = (
+				61C07CDA2431C0B500B02FBB /* Response+Rx.swift */,
+				61C07CD32431A31B00B02FBB /* JLProvider.swift */,
+			);
+			path = Provider;
+			sourceTree = "<group>";
+		};
+		61C07CD52431A35F00B02FBB /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				61C07CD62431A37F00B02FBB /* ExampleService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		61C07CDE2431DE4B00B02FBB /* sampleData */ = {
+			isa = PBXGroup;
+			children = (
+				61C07CDF2431DE7400B02FBB /* token.json */,
+				61C07CE12431DEC500B02FBB /* data.json */,
+			);
+			path = sampleData;
+			sourceTree = "<group>";
+		};
 		61C65ACF242204E3008B44E0 = {
 			isa = PBXGroup;
 			children = (
@@ -201,6 +262,7 @@
 				61C65AF12422062E008B44E0 /* AutoCalculationable.swift */,
 				61C65AF32422062E008B44E0 /* Inchable.swift */,
 				61C65AF22422062E008B44E0 /* Screenshotable.swift */,
+				61C07CE32431E46200B02FBB /* LocalData.swift */,
 			);
 			path = protocol;
 			sourceTree = "<group>";
@@ -221,6 +283,11 @@
 		61C65AF92422070D008B44E0 /* http */ = {
 			isa = PBXGroup;
 			children = (
+				61C07CDE2431DE4B00B02FBB /* sampleData */,
+				61C07CD52431A35F00B02FBB /* Service */,
+				61C07CD22431A2FE00B02FBB /* Provider */,
+				61C07CCD24319E1D00B02FBB /* Model */,
+				61C07CCA24319B9900B02FBB /* API */,
 			);
 			path = http;
 			sourceTree = "<group>";
@@ -300,8 +367,10 @@
 				61C65AE8242204E6008B44E0 /* LaunchScreen.storyboard in Resources */,
 				61C65B0124222602008B44E0 /* TestStoryboard.storyboard in Resources */,
 				6115E6B82423185700075CC2 /* UtimesAlertView.xib in Resources */,
+				61C07CE22431DEC500B02FBB /* data.json in Resources */,
 				61C65AE5242204E6008B44E0 /* Preview Assets.xcassets in Resources */,
 				61C65AE2242204E6008B44E0 /* Assets.xcassets in Resources */,
+				61C07CE02431DE7400B02FBB /* token.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,16 +408,23 @@
 			files = (
 				61C65AF52422062E008B44E0 /* AutoCalculationable.swift in Sources */,
 				61C65AF62422062E008B44E0 /* Screenshotable.swift in Sources */,
+				61C07CCC24319C7A00B02FBB /* ExampleAPI.swift in Sources */,
 				61C07CC12428B8D100B02FBB /* MainTableController.swift in Sources */,
 				6115E6B72423185700075CC2 /* UtimesAlertView.swift in Sources */,
 				61C07CBC2428B89700B02FBB /* SecondViewController.swift in Sources */,
+				61C07CCF24319E2F00B02FBB /* ExampleInfo.swift in Sources */,
 				61C65AFF242225C6008B44E0 /* TestViewController.swift in Sources */,
 				61C07CB624286FB300B02FBB /* TestAnimatoredViewController.swift in Sources */,
+				61C07CE42431E46200B02FBB /* LocalData.swift in Sources */,
+				61C07CD72431A37F00B02FBB /* ExampleService.swift in Sources */,
 				61C65ADC242204E3008B44E0 /* AppDelegate.swift in Sources */,
 				61C07CB224286BFD00B02FBB /* TestTopController.swift in Sources */,
 				61C07CB424286CF100B02FBB /* TestAnimationViewController.swift in Sources */,
+				61C07CDB2431C0B500B02FBB /* Response+Rx.swift in Sources */,
+				61C07CD42431A31B00B02FBB /* JLProvider.swift in Sources */,
 				61C07CC72429ACCF00B02FBB /* TransitionAnimation.swift in Sources */,
 				61C65AF82422062E008B44E0 /* Authorityable.swift in Sources */,
+				61C07CD12431A2B600B02FBB /* ResponseNormalModel.swift in Sources */,
 				61C65AF72422062E008B44E0 /* Inchable.swift in Sources */,
 				6115E6B12423166A00075CC2 /* TransitionAnimator.swift in Sources */,
 				61C65ADE242204E3008B44E0 /* SceneDelegate.swift in Sources */,
